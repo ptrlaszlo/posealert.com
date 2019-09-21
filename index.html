@@ -1,0 +1,69 @@
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+  </head>
+  <body>
+    <img src="person.jpg" id="image">
+    <canvas style="border:1px solid red" width="600" height="600" id="cnvs"></canvas>
+    <!-- Load TensorFlow.js -->
+    <script src="https://unpkg.com/@tensorflow/tfjs"></script>
+    <!-- Load Posenet -->
+    <script src="https://unpkg.com/@tensorflow-models/posenet">
+    </script>
+    <script type="text/javascript">
+      async function netLoaded(net){
+        const imageScaleFactor = 0.50;
+        const flipHorizontal = false;
+        const outputStride = 16;
+        const imageElement = document.getElementById('image');
+
+        const c = document.getElementById("cnvs");
+        const ctx = c.getContext("2d");
+        ctx.drawImage(imageElement,0,0);
+
+        const pose = await net.estimateSinglePose(imageElement, imageScaleFactor, flipHorizontal, outputStride);
+
+        console.log(pose);
+        let pointSize = 3;
+        ctx.fillStyle = "#ff2626"; // Red color
+        
+        pose.keypoints.map(keypoint => {
+          let confidence = 0.6;
+          if (keypoint.score > confidence) {
+
+            ctx.beginPath(); //Start path
+            ctx.fillText(keypoint.part, keypoint.position.x + 5, keypoint.position.y);
+            ctx.arc(keypoint.position.x, keypoint.position.y, pointSize, 0, Math.PI * 2, true); // Draw a point using the arc function of the canvas with a point structure.
+            ctx.fill(); // Close the path and fill.
+          }
+
+        });
+      }
+
+      // MobileNet (smaller, faster, less accurate)
+// const net = await posenet.load({
+//   architecture: 'MobileNetV1',
+//   outputStride: 16,
+//   inputResolution: 513,
+//   multiplier: 0.75
+// });
+
+// ResNet (larger, slower, more accurate) **new!**
+// const net = await posenet.load({
+//   architecture: 'ResNet50',
+//   outputStride: 32,
+//   inputResolution: 257,
+//   quantBytes: 2
+// });
+
+      //Load the model
+      posenet.load({
+        architecture: 'ResNet50',
+        outputStride: 32,
+        inputResolution: 257,
+        quantBytes: 2
+      }).then(netLoaded);
+    </script>
+  </body>
+</html>
