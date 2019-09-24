@@ -28,6 +28,12 @@
 		"oAP": "/generated/index.html",
 		"oF": 0
 		},
+	"/generated": {
+		"ft": 65536,
+		"oA": 1,
+		"oAP": "/generated/generated",
+		"oF": 0
+		},
 	"/upload.sh": {
 		"cB": 0,
 		"ft": 8192,
@@ -47,7 +53,7 @@
 	"displayValueWasSetByUser": 1,
 	"iconImageName": "brackets-koamaru",
 	"iconImageWasSetByUser": 0,
-	"lastBuiltDate": 591045251.75288999
+	"lastBuiltDate": 591046246.96177101
 	},
 "projectSettings": {
 	"abortBuildOnError": 1,
