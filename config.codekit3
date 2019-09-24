@@ -9,18 +9,23 @@
 	],
 "creatorBuild": "31491",
 "files": {
+	"/app/assets/js/app.js": {
+		"bF": 4,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/generated/assets/js/app.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
 	"/app/index.html": {
 		"cB": 0,
 		"ft": 8192,
 		"hM": 1,
 		"oA": 0,
 		"oAP": "/generated/index.html",
-		"oF": 0
-		},
-	"/generated": {
-		"ft": 65536,
-		"oA": 1,
-		"oAP": "/generated/generated",
 		"oF": 0
 		},
 	"/upload.sh": {
@@ -42,7 +47,7 @@
 	"displayValueWasSetByUser": 1,
 	"iconImageName": "brackets-koamaru",
 	"iconImageWasSetByUser": 0,
-	"lastBuiltDate": 591044150.38384998
+	"lastBuiltDate": 591045251.75288999
 	},
 "projectSettings": {
 	"abortBuildOnError": 1,
@@ -478,7 +483,7 @@
 			}
 		},
 	"esLintConfigFileHandlingType": 0,
-	"esLintECMAVersion": 7,
+	"esLintECMAVersion": 8,
 	"esLintEnvironmentsMask": 1,
 	"esLintRules": {
 		"accessor-pairs": {
@@ -798,7 +803,7 @@
 			"optionString": "{'allowParens': true}"
 			},
 		"no-console": {
-			"active": 1,
+			"active": 0,
 			"optionString": "{'allow': ['warn', 'error']}"
 			},
 		"no-const-assign": {
@@ -1920,7 +1925,7 @@
 		},
 	"languageDefaultsJS": {
 		"autoOutputAction": 0,
-		"autoOutputPathFilenamePattern": "*-min.js",
+		"autoOutputPathFilenamePattern": "*.js",
 		"autoOutputPathRelativePath": "/min",
 		"autoOutputPathReplace1": "",
 		"autoOutputPathReplace2": "",
