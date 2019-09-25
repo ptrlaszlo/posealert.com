@@ -20,6 +20,17 @@
 		"sC": 3,
 		"tS": 0
 		},
+	"/app/assets/js/video.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 1,
+		"oAP": "/generated/assets/js/video.js",
+		"oF": 1,
+		"sC": 3,
+		"tS": 0
+		},
 	"/app/index.html": {
 		"cB": 0,
 		"ft": 8192,
@@ -53,7 +64,7 @@
 	"displayValueWasSetByUser": 1,
 	"iconImageName": "brackets-koamaru",
 	"iconImageWasSetByUser": 0,
-	"lastBuiltDate": 591046246.96177101
+	"lastBuiltDate": 591081734.52623904
 	},
 "projectSettings": {
 	"abortBuildOnError": 1,

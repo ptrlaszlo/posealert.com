@@ -1,5 +1,6 @@
 /* global posenet */ // to mute eslint warnings
-/* global Promise */ // to mute eslint warnings
+
+import { loadVideo } from './video.js';
 
 const videoWidth = 800;
 const videoHeight = 650;
@@ -21,56 +22,9 @@ posenet.load(
 ).then(netLoadedForVideo);
 
 async function netLoadedForVideo(net) {
-  async function setupCamera() {
-    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-      throw new Error('Browser API navigator.mediaDevices.getUserMedia not available');
-    }
-
-    const video = document.getElementById('video');
-    video.width = videoWidth;
-    video.height = videoHeight;
-
-    function isAndroid() {
-      return /Android/i.test(navigator.userAgent);
-    }
-
-    function isiOS() {
-      return /iPhone|iPad|iPod/i.test(navigator.userAgent);
-    }
-
-    function isMobile() {
-      return isAndroid() || isiOS();
-    }
-
-    const mobile = isMobile();
-    const stream = await navigator.mediaDevices.getUserMedia({
-    'audio': false,
-    'video': {
-        facingMode: 'user',
-        width: mobile ? undefined : videoWidth,
-        height: mobile ? undefined : videoHeight
-      }
-    });
-    video.srcObject = stream;
-
-    return new Promise((resolve) => {
-      video.onloadedmetadata = () => {
-        resolve(video);
-      };
-    });
-  }
-
-  async function loadVideo() {
-    const video = await setupCamera();
-    video.play();
-
-    return video;
-  }
-
-
   let video;
   try {
-    video = await loadVideo();
+    video = await loadVideo('video', videoWidth, videoHeight);
   } catch (e) {
     console.log("No video");
     throw e;
