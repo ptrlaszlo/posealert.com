@@ -63,10 +63,6 @@ function detectPoseInRealTime(video, net) {
       decodingMethod: 'single-person'
     });
 
-    if ( Math.floor((Math.random() * 100) + 1) == 60 ) {
-      console.log(poses);
-    }
-
     ctx.clearRect(0, 0, videoWidth, videoHeight);
 
     drawVideo(ctx, video, videoWidth, videoHeight)
