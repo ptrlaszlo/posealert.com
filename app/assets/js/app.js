@@ -6,7 +6,6 @@ import { drawVideo, drawKeypoints } from './draw.js';
 const videoWidth = 800;
 const videoHeight = 650;
 
-
 // ResNet (larger, slower, more accurate)
 const resNetConfig = {
   architecture: 'ResNet50',
@@ -16,16 +15,16 @@ const resNetConfig = {
 };
 
 // MobileNet (smaller, faster, less accurate)
-// const mobileNetConfig = {
-//   architecture: 'MobileNetV1',
-//   outputStride: 16,
-//   inputResolution: 513,
-//   multiplier: 0.75
-// };
+const mobileNetConfig = {
+  architecture: 'MobileNetV1',
+  outputStride: 16,
+  inputResolution: 513,
+  multiplier: 0.75
+};
 
 // Important to purge variables and free up GPU memory
 // net.dispose();
-posenet.load(resNetConfig).then(netLoadedForVideo);
+posenet.load(mobileNetConfig).then(netLoadedForVideo);
 
 async function netLoadedForVideo(net) {
   let video;
@@ -49,44 +48,37 @@ function detectPoseInRealTime(video, net) {
   canvas.width = videoWidth;
   canvas.height = videoHeight;
 
-  poseDetectionFrame(video, net, ctx);
-}
+  async function poseDetectionFrame() {
+    const minPoseConfidence = 0.4;
+    const minPartConfidence = 0.6;
 
-async function poseDetectionFrame(video, net, ctx) {
-  let poses = [];
-  let minPoseConfidence;
-  let minPartConfidence;
+    // since images are being fed from a webcam, we want to feed in the
+    // original image and then just flip the keypoints' x coordinates. If instead
+    // we flip the image, then correcting left-right keypoint pairs requires a
+    // permutation on all the keypoints.
+    const flipPoseHorizontal = true;
 
-  // since images are being fed from a webcam, we want to feed in the
-  // original image and then just flip the keypoints' x coordinates. If instead
-  // we flip the image, then correcting left-right keypoint pairs requires a
-  // permutation on all the keypoints.
-  const flipPoseHorizontal = true;
+    const poses = await net.estimatePoses(video, {
+      flipHorizontal: flipPoseHorizontal,
+      decodingMethod: 'single-person'
+    });
 
-  const pose = await net.estimatePoses(video, {
-    flipHorizontal: flipPoseHorizontal,
-    decodingMethod: 'single-person'
-  });
-
-  if ( Math.floor((Math.random() * 100) + 1) == 60 ) {
-    console.log(pose);
-  }
-  poses = poses.concat(pose);
-  minPoseConfidence = 0.4;
-  minPartConfidence = 0.6;
-
-  ctx.clearRect(0, 0, videoWidth, videoHeight);
-
-  drawVideo(ctx, video, videoWidth, videoHeight)
-
-  // For each pose (i.e. person) detected in an image, loop through the poses
-  // and draw the resulting skeleton and keypoints if over certain confidence
-  // scores
-  poses.forEach(({score, keypoints}) => {
-    if (score >= minPoseConfidence) {
-        drawKeypoints(keypoints, minPartConfidence, ctx);
+    if ( Math.floor((Math.random() * 100) + 1) == 60 ) {
+      console.log(poses);
     }
-  });
 
-  requestAnimationFrame(poseDetectionFrame(video, net, ctx));
+    ctx.clearRect(0, 0, videoWidth, videoHeight);
+
+    drawVideo(ctx, video, videoWidth, videoHeight)
+
+    poses.forEach(({score, keypoints}) => {
+      if (score >= minPoseConfidence) {
+        drawKeypoints(keypoints, minPartConfidence, ctx);
+      }
+    });
+
+    requestAnimationFrame(poseDetectionFrame);
+  }
+
+  poseDetectionFrame();
 }
