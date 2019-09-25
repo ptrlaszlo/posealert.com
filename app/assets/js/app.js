@@ -1,25 +1,31 @@
 /* global posenet */ // to mute eslint warnings
 
 import { loadVideo } from './video.js';
+import { drawVideo, drawKeypoints } from './draw.js';
 
 const videoWidth = 800;
 const videoHeight = 650;
 
-      //Load the model
-posenet.load(
-// {
-//   architecture: 'MobileNetV1',
-//   outputStride: 16,
-//   inputResolution: 513,
-//   multiplier: 0.75
-// }
-{
+
+// ResNet (larger, slower, more accurate)
+const resNetConfig = {
   architecture: 'ResNet50',
   outputStride: 32,
   inputResolution: 257,
   quantBytes: 2
-}
-).then(netLoadedForVideo);
+};
+
+// MobileNet (smaller, faster, less accurate)
+// const mobileNetConfig = {
+//   architecture: 'MobileNetV1',
+//   outputStride: 16,
+//   inputResolution: 513,
+//   multiplier: 0.75
+// };
+
+// Important to purge variables and free up GPU memory
+// net.dispose();
+posenet.load(resNetConfig).then(netLoadedForVideo);
 
 async function netLoadedForVideo(net) {
   let video;
@@ -31,28 +37,6 @@ async function netLoadedForVideo(net) {
   }
   detectPoseInRealTime(video, net);
 }
-
-      // MobileNet (smaller, faster, less accurate)
-// const net = await posenet.load({
-//   architecture: 'MobileNetV1',
-//   outputStride: 16,
-//   inputResolution: 513,
-//   multiplier: 0.75
-// });
-
-// ResNet (larger, slower, more accurate) **new!**
-// const net = await posenet.load({
-//   architecture: 'ResNet50',
-//   outputStride: 32,
-//   inputResolution: 257,
-//   quantBytes: 2
-// });
-
-      // Important to purge variables and free up GPU memory
-      // guiState.net.dispose();
-
-
-
 
 /**
  * Feeds an image to posenet to estimate poses - this is where the magic
@@ -93,54 +77,16 @@ async function poseDetectionFrame(video, net, ctx) {
 
   ctx.clearRect(0, 0, videoWidth, videoHeight);
 
-  // if (guiState.output.showVideo) {
-  ctx.save();
-  ctx.scale(-1, 1);
-  ctx.translate(-videoWidth, 0);
-  ctx.drawImage(video, 0, 0, videoWidth, videoHeight);
-  ctx.restore();
-  // }
+  drawVideo(ctx, video, videoWidth, videoHeight)
 
   // For each pose (i.e. person) detected in an image, loop through the poses
   // and draw the resulting skeleton and keypoints if over certain confidence
   // scores
   poses.forEach(({score, keypoints}) => {
     if (score >= minPoseConfidence) {
-      // if (guiState.output.showPoints) {
         drawKeypoints(keypoints, minPartConfidence, ctx);
-      // }
-      // if (guiState.output.showSkeleton) {
-      //   drawSkeleton(keypoints, minPartConfidence, ctx);
-      // }
-      // if (guiState.output.showBoundingBox) {
-      //   drawBoundingBox(keypoints, ctx);
-      // }
     }
   });
 
   requestAnimationFrame(poseDetectionFrame(video, net, ctx));
-}
-
-function drawKeypoints(keypoints, minConfidence, ctx, scale = 1) {
-  for (let i = 0; i < keypoints.length; i++) {
-    const keypoint = keypoints[i];
-
-    if (keypoint.score < minConfidence) {
-      continue;
-    }
-
-    const {y, x} = keypoint.position;
-    const color = "#ff2626";
-    drawPoint(ctx, y * scale, x * scale, 3, color, keypoint.part + ' ' + keypoint.score.toFixed(4));
-  }
-}
-
-function drawPoint(ctx, y, x, r, color, text) {
-  ctx.beginPath();
-  ctx.arc(x, y, r, 0, 2 * Math.PI);
-  ctx.fillStyle = color;
-
-  ctx.fillText(text, x + 5, y);
-
-  ctx.fill();
 }
