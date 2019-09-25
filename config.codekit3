@@ -42,12 +42,12 @@
 		"sC": 3,
 		"tS": 0
 		},
-	"/app/index.html": {
+	"/app/detect.html": {
 		"cB": 0,
 		"ft": 8192,
 		"hM": 1,
 		"oA": 0,
-		"oAP": "/generated/index.html",
+		"oAP": "/generated/detect.html",
 		"oF": 0
 		},
 	"/generated": {
@@ -75,7 +75,7 @@
 	"displayValueWasSetByUser": 1,
 	"iconImageName": "brackets-koamaru",
 	"iconImageWasSetByUser": 0,
-	"lastBuiltDate": 591082031.86296999
+	"lastBuiltDate": 591083685.25703704
 	},
 "projectSettings": {
 	"abortBuildOnError": 1,

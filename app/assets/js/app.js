@@ -31,7 +31,7 @@ async function netLoadedForVideo(net) {
   try {
     video = await loadVideo('video', videoWidth, videoHeight);
   } catch (e) {
-    console.log("No video");
+    document.getElementById('info').innerHTML = 'Could not load video';
     throw e;
   }
   detectPoseInRealTime(video, net);
@@ -49,6 +49,8 @@ function detectPoseInRealTime(video, net) {
   canvas.height = videoHeight;
 
   async function poseDetectionFrame() {
+    // TODO detect changes here
+
     const minPoseConfidence = 0.4;
     const minPartConfidence = 0.6;
 
@@ -73,7 +75,7 @@ function detectPoseInRealTime(video, net) {
       }
     });
 
-    requestAnimationFrame(poseDetectionFrame);
+    setTimeout(function(){ requestAnimationFrame(poseDetectionFrame); }, 2000);
   }
 
   poseDetectionFrame();
