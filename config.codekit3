@@ -50,6 +50,14 @@
 		"oAP": "/generated/detect.html",
 		"oF": 0
 		},
+	"/app/index.html": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 1,
+		"oA": 0,
+		"oAP": "/generated/index.html",
+		"oF": 0
+		},
 	"/generated": {
 		"ft": 65536,
 		"oA": 1,
