@@ -6,6 +6,9 @@ import { drawVideo, drawKeypoints } from './draw.js';
 const videoWidth = 800;
 const videoHeight = 650;
 
+let isMobileNet = true;
+let newModelConfig = null;
+
 // ResNet (larger, slower, more accurate)
 const resNetConfig = {
   architecture: 'ResNet50',
@@ -22,8 +25,17 @@ const mobileNetConfig = {
   multiplier: 0.75
 };
 
-// Important to purge variables and free up GPU memory
-// net.dispose();
+function netModelSelected(radioBtn) {
+  if (isMobileNet && radioBtn.value == 'resnet') {
+    newModelConfig = resNetConfig;
+  } else if (!isMobileNet && radioBtn.value == 'mobilenet') {
+    newModelConfig = mobileNetConfig;
+  }
+}
+
+window.netModelSelected = netModelSelected;
+
+// load initial model based on localcache and set isMobileNet based on that
 posenet.load(mobileNetConfig).then(netLoadedForVideo);
 
 async function netLoadedForVideo(net) {
@@ -49,9 +61,16 @@ function detectPoseInRealTime(video, net) {
   canvas.height = videoHeight;
 
   async function poseDetectionFrame() {
-    // TODO detect changes here
+    if (newModelConfig != null) {
+      // Important to purge variables and free up GPU memory
+      net.dispose();
+      console.log('loading new config ' + newModelConfig);
+      net = await posenet.load(newModelConfig);
+      isMobileNet = newModelConfig == mobileNetConfig;
+      newModelConfig = null;
+    }
 
-    const minPoseConfidence = 0.4;
+    const minPoseConfidence = 0.3;
     const minPartConfidence = 0.6;
 
     // since images are being fed from a webcam, we want to feed in the
@@ -75,7 +94,8 @@ function detectPoseInRealTime(video, net) {
       }
     });
 
-    setTimeout(function(){ requestAnimationFrame(poseDetectionFrame); }, 2000);
+    // setTimeout(function(){ requestAnimationFrame(poseDetectionFrame); }, 2000);
+    requestAnimationFrame(poseDetectionFrame);
   }
 
   poseDetectionFrame();
