@@ -25,11 +25,18 @@ const mobileNetConfig = {
   multiplier: 0.75
 };
 
+const btnRadioResnet = document.getElementById('btn_radio_resnet');
+const btnRadioMobilenet = document.getElementById('btn_radio_mobilenet');
+
 function netModelSelected(radioBtn) {
   if (isMobileNet && radioBtn.value == 'resnet') {
     newModelConfig = resNetConfig;
+    btnRadioResnet.disabled = true;
+    btnRadioMobilenet.disabled = true;
   } else if (!isMobileNet && radioBtn.value == 'mobilenet') {
     newModelConfig = mobileNetConfig;
+    btnRadioResnet.disabled = true;
+    btnRadioMobilenet.disabled = true;
   }
 }
 
@@ -62,12 +69,14 @@ function detectPoseInRealTime(video, net) {
 
   async function poseDetectionFrame() {
     if (newModelConfig != null) {
-      // Important to purge variables and free up GPU memory
-      net.dispose();
+      // Changing the architecture of the network
+      net.dispose(); // Important to purge variables and free up GPU memory
       console.log('loading new config ' + newModelConfig);
       net = await posenet.load(newModelConfig);
       isMobileNet = newModelConfig == mobileNetConfig;
       newModelConfig = null;
+      btnRadioResnet.disabled = false;
+      btnRadioMobilenet.disabled = false;
     }
 
     const minPoseConfidence = 0.3;
