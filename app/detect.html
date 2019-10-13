@@ -4,6 +4,14 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.5/css/bulma.min.css">
+    <style type="text/css">
+      #camera, #video, #output {
+        position: fixed;
+        height: 100%;
+        width: 100%;
+        object-fit: cover;
+      }
+    </style>
   </head>
   <body>
     <section class="section">
@@ -21,7 +29,7 @@
         </div>
       </div>
     </section>
-    <section>
+    <section id="camera">
       <canvas id="output" style="margin-right: auto;margin-left: auto;display: block;"></canvas>
       <video id="video" playsinline style="-moz-transform: scaleX(-1);-o-transform: scaleX(-1);-webkit-transform: scaleX(-1);transform: scaleX(-1);display: none;"></video>
     </section>
