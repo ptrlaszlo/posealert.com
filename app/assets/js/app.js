@@ -1,7 +1,7 @@
 /* global posenet */ // to mute eslint warnings
 
 import { loadVideo } from './video.js';
-import { drawVideo, drawKeypoints } from './draw.js';
+import { drawKeypoints } from './draw.js';
 
 const videoWidth = 800;
 const videoHeight = 650;
@@ -63,7 +63,6 @@ async function netLoadedForVideo(net) {
 function detectPoseInRealTime(video, net) {
   const canvas = document.getElementById('output');
   const ctx = canvas.getContext('2d');
-
   canvas.width = videoWidth;
   canvas.height = videoHeight;
 
@@ -95,16 +94,14 @@ function detectPoseInRealTime(video, net) {
 
     ctx.clearRect(0, 0, videoWidth, videoHeight);
 
-    drawVideo(ctx, video, videoWidth, videoHeight)
-
     poses.forEach(({score, keypoints}) => {
       if (score >= minPoseConfidence) {
         drawKeypoints(keypoints, minPartConfidence, ctx);
       }
     });
 
-    // setTimeout(function(){ requestAnimationFrame(poseDetectionFrame); }, 2000);
-    requestAnimationFrame(poseDetectionFrame);
+    setTimeout(function(){ requestAnimationFrame(poseDetectionFrame); }, 2000);
+    // requestAnimationFrame(poseDetectionFrame);
   }
 
   poseDetectionFrame();

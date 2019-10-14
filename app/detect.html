@@ -2,9 +2,15 @@
   <head>
     <title>posealert.com</title>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.5/css/bulma.min.css">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <style type="text/css">
+      html, body{
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        width: 100%;
+      }
       #camera, #video, #output {
         position: fixed;
         height: 100%;
@@ -14,7 +20,7 @@
     </style>
   </head>
   <body>
-    <section class="section">
+    <section class="section" style="display:none">
       <div class="container has-text-centered">
         <h5 id="info" class="title is-5">info</h5>
         <div class="control has-text-centered">
@@ -30,8 +36,8 @@
       </div>
     </section>
     <section id="camera">
-      <canvas id="output" style="margin-right: auto;margin-left: auto;display: block;"></canvas>
-      <video id="video" playsinline style="-moz-transform: scaleX(-1);-o-transform: scaleX(-1);-webkit-transform: scaleX(-1);transform: scaleX(-1);display: none;"></video>
+      <video id="video" playsinline style="-moz-transform: scaleX(-1);-o-transform: scaleX(-1);-webkit-transform: scaleX(-1);transform: scaleX(-1);"></video>
+      <canvas id="output"></canvas>
     </section>
 
     <!-- Load TensorFlow.js -->

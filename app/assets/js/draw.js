@@ -1,13 +1,5 @@
 
-export { drawVideo, drawKeypoints };
-
-function drawVideo(ctx, video, videoWidth, videoHeight) {
-  ctx.save();
-  ctx.scale(-1, 1);
-  ctx.translate(-videoWidth, 0);
-  ctx.drawImage(video, 0, 0, videoWidth, videoHeight);
-  ctx.restore();
-}
+export { drawKeypoints };
 
 function drawKeypoints(keypoints, minConfidence, ctx, scale = 1) {
   for (let i = 0; i < keypoints.length; i++) {

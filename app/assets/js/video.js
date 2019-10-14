@@ -18,13 +18,10 @@ async function setupCamera(videoId, videoWidth, videoHeight) {
   video.width = videoWidth;
   video.height = videoHeight;
 
-  const mobile = isMobile();
   const stream = await navigator.mediaDevices.getUserMedia({
   'audio': false,
   'video': {
-      facingMode: 'user',
-      width: mobile ? undefined : videoWidth,
-      height: mobile ? undefined : videoHeight
+      facingMode: 'user'
     }
   });
   video.srcObject = stream;
@@ -34,16 +31,4 @@ async function setupCamera(videoId, videoWidth, videoHeight) {
       resolve(video);
     };
   });
-}
-
-function isAndroid() {
-  return /Android/i.test(navigator.userAgent);
-}
-
-function isiOS() {
-  return /iPhone|iPad|iPod/i.test(navigator.userAgent);
-}
-
-function isMobile() {
-  return isAndroid() || isiOS();
 }

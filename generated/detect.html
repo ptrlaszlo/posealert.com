@@ -1,6 +1,12 @@
-<html> <head> <title>posealert.com</title> <meta charset="utf-8"> <meta name="viewport" content="width=device-width,initial-scale=1"> <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.5/css/bulma.min.css"> <style> #camera, #video, #output {
+<html> <head> <title>posealert.com</title> <meta charset="utf-8"> <meta http-equiv="x-ua-compatible" content="ie=edge"> <meta name="viewport" content="width=device-width,initial-scale=1,shrink-to-fit=no"> <style> html, body{
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        width: 100%;
+      }
+      #camera, #video, #output {
         position: fixed;
         height: 100%;
         width: 100%;
         object-fit: cover;
-      } </style> </head> <body> <section class="section"> <div class="container has-text-centered"> <h5 id="info" class="title is-5">info</h5> <div class="control has-text-centered"> <label class="radio"> <input id="btn_radio_resnet" type="radio" name="architecture" value="resnet" onclick="netModelSelected(this)"> BIG Model </label> <label class="radio"> <input id="btn_radio_mobilenet" type="radio" name="architecture" value="mobilenet" onclick="netModelSelected(this)" checked="checked"> small Model </label> </div> </div> </section> <section id="camera"> <canvas id="output" style="margin-right: auto;margin-left: auto;display: block;"></canvas> <video id="video" playsinline style="-moz-transform: scaleX(-1);-o-transform: scaleX(-1);-webkit-transform: scaleX(-1);transform: scaleX(-1);display: none;"></video> </section> <script src="https://unpkg.com/@tensorflow/tfjs"></script> <script src="https://unpkg.com/@tensorflow-models/posenet"></script> <script src="assets/js/app.js"></script> </body> </html>
+      } </style> </head> <body> <section class="section" style="display:none"> <div class="container has-text-centered"> <h5 id="info" class="title is-5">info</h5> <div class="control has-text-centered"> <label class="radio"> <input id="btn_radio_resnet" type="radio" name="architecture" value="resnet" onclick="netModelSelected(this)"> BIG Model </label> <label class="radio"> <input id="btn_radio_mobilenet" type="radio" name="architecture" value="mobilenet" onclick="netModelSelected(this)" checked="checked"> small Model </label> </div> </div> </section> <section id="camera"> <video id="video" playsinline style="-moz-transform: scaleX(-1);-o-transform: scaleX(-1);-webkit-transform: scaleX(-1);transform: scaleX(-1);"></video> <canvas id="output"></canvas> </section> <script src="https://unpkg.com/@tensorflow/tfjs"></script> <script src="https://unpkg.com/@tensorflow-models/posenet"></script> <script src="assets/js/app.js"></script> </body> </html>
