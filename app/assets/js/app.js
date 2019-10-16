@@ -6,16 +6,13 @@ import { drawKeypoints } from './draw.js';
 const videoWidth = 800;
 const videoHeight = 650;
 
-let isMobileNet = true;
-let newModelConfig = null;
-
 // ResNet (larger, slower, more accurate)
-const resNetConfig = {
-  architecture: 'ResNet50',
-  outputStride: 32,
-  inputResolution: 257,
-  quantBytes: 2
-};
+// const resNetConfig = {
+//   architecture: 'ResNet50',
+//   outputStride: 32,
+//   inputResolution: 257,
+//   quantBytes: 2
+// };
 
 // MobileNet (smaller, faster, less accurate)
 const mobileNetConfig = {
@@ -25,23 +22,6 @@ const mobileNetConfig = {
   multiplier: 0.75
 };
 
-const btnRadioResnet = document.getElementById('btn_radio_resnet');
-const btnRadioMobilenet = document.getElementById('btn_radio_mobilenet');
-
-function netModelSelected(radioBtn) {
-  if (isMobileNet && radioBtn.value == 'resnet') {
-    newModelConfig = resNetConfig;
-    btnRadioResnet.disabled = true;
-    btnRadioMobilenet.disabled = true;
-  } else if (!isMobileNet && radioBtn.value == 'mobilenet') {
-    newModelConfig = mobileNetConfig;
-    btnRadioResnet.disabled = true;
-    btnRadioMobilenet.disabled = true;
-  }
-}
-
-window.netModelSelected = netModelSelected;
-
 // load initial model based on localcache and set isMobileNet based on that
 posenet.load(mobileNetConfig).then(netLoadedForVideo);
 
@@ -50,7 +30,7 @@ async function netLoadedForVideo(net) {
   try {
     video = await loadVideo('video', videoWidth, videoHeight);
   } catch (e) {
-    document.getElementById('info').innerHTML = 'Could not load video';
+    //TODO error?
     throw e;
   }
   detectPoseInRealTime(video, net);
@@ -67,16 +47,7 @@ function detectPoseInRealTime(video, net) {
   canvas.height = videoHeight;
 
   async function poseDetectionFrame() {
-    if (newModelConfig != null) {
-      // Changing the architecture of the network
-      net.dispose(); // Important to purge variables and free up GPU memory
-      console.log('loading new config ' + newModelConfig);
-      net = await posenet.load(newModelConfig);
-      isMobileNet = newModelConfig == mobileNetConfig;
-      newModelConfig = null;
-      btnRadioResnet.disabled = false;
-      btnRadioMobilenet.disabled = false;
-    }
+    // net.dispose(); // Important to purge variables and free up GPU memory
 
     const minPoseConfidence = 0.3;
     const minPartConfidence = 0.6;
