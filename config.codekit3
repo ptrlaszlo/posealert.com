@@ -52,12 +52,12 @@
 		"sC": 3,
 		"tS": 0
 		},
-	"/app/detect.html": {
+	"/app/faq.html": {
 		"cB": 0,
 		"ft": 8192,
-		"hM": 1,
+		"hM": 0,
 		"oA": 0,
-		"oAP": "/generated/detect.html",
+		"oAP": "/generated/faq.html",
 		"oF": 0
 		},
 	"/app/index.html": {

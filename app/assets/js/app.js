@@ -41,6 +41,7 @@ async function netLoadedForVideo(net) {
  * happens. This function loops with a requestAnimationFrame method.
  */
 function detectPoseInRealTime(video, net) {
+  document.getElementById('camera').classList.remove("no-display");
   const canvas = document.getElementById('output');
   const ctx = canvas.getContext('2d');
   canvas.width = videoWidth;
