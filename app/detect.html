@@ -4,54 +4,23 @@
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <style type="text/css">
-      html, body{
-        margin: 0;
-        padding: 0;
-        height: 100%;
-        width: 100%;
-      }
-      .cover {
-        position: fixed;
-        height: 100%;
-        width: 100%;
-        object-fit: cover;
-      }
-      .btn {
-        background-color: rgba(0, 0, 0, 0.7);
-        border: 1px solid #DDD;
-        color: #DDD;
-        font-size: 16px;
-        border-radius: 30px;
-        padding: 15px 20px;
-        text-align: center;
-        box-shadow: 0 5px 10px 0 rgba(0,0,0,0.2);
-        cursor: pointer;
-      }
-      .btn-bottom-center{
-        width: 110px;
-        position: fixed;
-        bottom: 30px;
-        left: calc(50% - 55px);
-      }
-
-    </style>
+    <link rel="stylesheet" href="assets/css/style-min.css">
   </head>
   <body>
     <div class="cover" >
-      <div style="display: table; height: 100%; width: 100%; overflow: hidden;">
-        <div style="display: table-cell; vertical-align: middle; text-align: center;">
+      <div class="table-full-size">
+        <div class="table-centered-cell">
           What is posealert.com and why does it need my camera?
         </div>
       </div>
     </div>
     <div id="camera" class="cover">
-      <video id="video" class="cover" playsinline style="-moz-transform: scaleX(-1);-o-transform: scaleX(-1);-webkit-transform: scaleX(-1);transform: scaleX(-1);"></video>
+      <video id="video" class="cover" playsinline></video>
       <canvas id="output" class="cover"></canvas>
 
     </div>
     <button class="btn btn-bottom-center">Calibrate</button>
-    <button class="btn" style="position: fixed; top:10px;right:10px">FAQ</button>
+    <button class="btn btn-top-right">FAQ</button>
 
     <!-- Load TensorFlow.js -->
     <script src="https://unpkg.com/@tensorflow/tfjs"></script>

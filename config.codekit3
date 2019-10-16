@@ -9,6 +9,16 @@
 	],
 "creatorBuild": "31491",
 "files": {
+	"/app/assets/css/style.css": {
+		"aP": 1,
+		"bl": 0,
+		"ft": 16,
+		"ma": 0,
+		"oA": 0,
+		"oAP": "/generated/assets/css/style-min.css",
+		"oF": 0,
+		"oS": 3
+		},
 	"/app/assets/js/app.js": {
 		"bF": 4,
 		"ft": 64,
