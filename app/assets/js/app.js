@@ -1,10 +1,11 @@
 /* global posenet */ // to mute eslint warnings
 
 import { loadVideo } from './video.js';
-import { drawKeypoints } from './draw.js';
+import { drawPoses } from './draw.js';
 
 const videoWidth = 800;
 const videoHeight = 650;
+window.debugMode = true;
 
 // ResNet (larger, slower, more accurate)
 // const resNetConfig = {
@@ -64,13 +65,9 @@ function detectPoseInRealTime(video, net) {
       decodingMethod: 'single-person'
     });
 
-    ctx.clearRect(0, 0, videoWidth, videoHeight);
-
-    poses.forEach(({score, keypoints}) => {
-      if (score >= minPoseConfidence) {
-        drawKeypoints(keypoints, minPartConfidence, ctx);
-      }
-    });
+    if (window.debugMode) {
+      drawPoses(ctx, videoWidth, videoHeight, poses, minPoseConfidence, minPartConfidence);
+    }
 
     setTimeout(function(){ requestAnimationFrame(poseDetectionFrame); }, 2000);
     // requestAnimationFrame(poseDetectionFrame);
