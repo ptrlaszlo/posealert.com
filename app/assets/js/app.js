@@ -2,6 +2,7 @@
 
 import { loadVideo } from './video.js';
 import { drawPoses } from './draw.js';
+import { showMsg } from './msg.js';
 
 const videoWidth = 800;
 const videoHeight = 650;
@@ -31,7 +32,7 @@ async function netLoadedForVideo(net) {
   try {
     video = await loadVideo('video', videoWidth, videoHeight);
   } catch (e) {
-    //TODO error?
+    showMsg("Couldn't load video, please try a different browser");
     throw e;
   }
   detectPoseInRealTime(video, net);
