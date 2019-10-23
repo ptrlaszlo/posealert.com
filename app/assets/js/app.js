@@ -3,57 +3,43 @@
 import { loadVideo } from './video.js';
 import { drawPoses } from './draw.js';
 import { showMsg } from './msg.js';
+import { isPoseCorrect } from './pose.js';
+import { config, mobileNetConfig } from './config.js';
+// import { storeJson, getJson } from './storage.js';
 
-const videoWidth = 800;
-const videoHeight = 650;
-window.debugMode = true;
-
-// ResNet (larger, slower, more accurate)
-// const resNetConfig = {
-//   architecture: 'ResNet50',
-//   outputStride: 32,
-//   inputResolution: 257,
-//   quantBytes: 2
-// };
-
-// MobileNet (smaller, faster, less accurate)
-const mobileNetConfig = {
-  architecture: 'MobileNetV1',
-  outputStride: 16,
-  inputResolution: 513,
-  multiplier: 0.75
-};
-
-// load initial model based on localcache and set isMobileNet based on that
-posenet.load(mobileNetConfig).then(netLoadedForVideo);
-
-async function netLoadedForVideo(net) {
+async function startRecognition() {
   let video;
   try {
-    video = await loadVideo('video', videoWidth, videoHeight);
+    video = await loadVideo('video', config.videoWidth, config.videoHeight);
   } catch (e) {
     showMsg("Couldn't load video, please try a different browser");
     throw e;
   }
+  document.getElementById('whycamera').classList.add('no-display');
+  let net;
+  try {
+    net = await posenet.load(mobileNetConfig);
+  } catch (e) {
+    showMsg("Couldn't load posenet, please try refreshing the page");
+    throw e;
+  }
   detectPoseInRealTime(video, net);
 }
+
+startRecognition();
 
 /**
  * Feeds an image to posenet to estimate poses - this is where the magic
  * happens. This function loops with a requestAnimationFrame method.
  */
 function detectPoseInRealTime(video, net) {
-  document.getElementById('camera').classList.remove("no-display");
   const canvas = document.getElementById('output');
   const ctx = canvas.getContext('2d');
-  canvas.width = videoWidth;
-  canvas.height = videoHeight;
+  canvas.width = config.videoWidth;
+  canvas.height = config.videoHeight;
 
   async function poseDetectionFrame() {
     // net.dispose(); // Important to purge variables and free up GPU memory
-
-    const minPoseConfidence = 0.3;
-    const minPartConfidence = 0.6;
 
     // since images are being fed from a webcam, we want to feed in the
     // original image and then just flip the keypoints' x coordinates. If instead
@@ -66,13 +52,36 @@ function detectPoseInRealTime(video, net) {
       decodingMethod: 'single-person'
     });
 
-    if (window.debugMode) {
-      drawPoses(ctx, videoWidth, videoHeight, poses, minPoseConfidence, minPartConfidence);
+    const currentPose = poses[0];
+
+    if (config.saveNextPose && currentPose.score >= config.minPoseConfidence) {
+      config.correctPose = currentPose;
+      config.saveNextPose = false;
     }
 
-    setTimeout(function(){ requestAnimationFrame(poseDetectionFrame); }, 2000);
-    // requestAnimationFrame(poseDetectionFrame);
+    if (config.debugMode) {
+      drawPoses(ctx, poses, config);
+    }
+
+    if (config.correctPose === undefined) {
+      requestAnimationFrame(poseDetectionFrame);
+    } else {
+      if (currentPose.score >= config.minPoseConfidence) {
+        const resss = isPoseCorrect(currentPose, config.correctPose, config.minPartConfidence, config.distanceDelta);
+        if (resss) {
+          document.getElementById('calibrate').style.backgroundColor = "green";
+        } else {
+          document.getElementById('calibrate').style.backgroundColor = "red";
+        }
+      }
+      // only running pose detection in every two seconds to save CPU
+      setTimeout(function(){ requestAnimationFrame(poseDetectionFrame); }, 2000);
+    }
   }
 
   poseDetectionFrame();
+}
+
+document.getElementById('calibrate').onclick = function() {
+  config.saveNextPose = true;
 }

@@ -7,18 +7,18 @@
     <link rel="stylesheet" href="assets/css/style-min.css">
   </head>
   <body>
-    <div class="cover" >
-      <div class="table-full-size">
-        <div class="table-centered-cell">
-          <a href="faq.html#whycamera">What is posealert.com and why does it need my camera?</a>
-        </div>
-      </div>
-    </div>
-    <div id="camera" class="cover no-display">
+    <div id="camera" class="cover">
       <video id="video" class="cover" playsinline></video>
       <canvas id="output" class="cover"></canvas>
     </div>
-    <button class="btn btn-bottom-center">Calibrate</button>
+    <div id="whycamera" class="cover">
+      <div class="table-full-size">
+        <div class="table-centered-cell">
+          <a href="faq.html#whycamera" target="_blank">What is posealert.com and why does it need my camera?</a>
+        </div>
+      </div>
+    </div>
+    <button id="calibrate" class="btn btn-bottom-center">Calibrate</button>
     <a href="faq.html" class="btn btn-top-right">FAQ</a>
     <div id="msgbox" class="no-display">
       <button class="delete" onclick="this.parentElement.classList.add('no-display')"></button>
