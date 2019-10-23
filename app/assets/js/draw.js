@@ -40,15 +40,14 @@ function drawKeypoints(keypoints, config, ctx, color, showDistance, scale = 1) {
 }
 
 function drawDistance(ctx, y, x, r, color) {
-  ctx.globalAlpha = 0.2;
   ctx.beginPath();
   ctx.arc(x, y, r, 0, 2 * Math.PI);
-  ctx.fillStyle = color;
-  ctx.fill();
+  ctx.setLineDash([5, 5]);
+  ctx.strokeStyle = color;
+  ctx.stroke();
 }
 
 function drawPoint(ctx, y, x, r, color, text) {
-  ctx.globalAlpha = 1;
   ctx.beginPath();
   ctx.arc(x, y, r, 0, 2 * Math.PI);
   ctx.fillStyle = color;
