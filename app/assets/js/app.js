@@ -2,7 +2,7 @@
 
 import { loadVideo } from './video.js';
 import { drawPoses } from './draw.js';
-import { showMsg } from './msg.js';
+import { showMsg, hideMsg } from './msg.js';
 import { isPoseCorrect } from './pose.js';
 import { config, mobileNetConfig } from './config.js';
 // import { storeJson, getJson } from './storage.js';
@@ -18,7 +18,6 @@ async function startRecognition() {
     showMsg("Couldn't load video, please try a different browser");
     throw e;
   }
-  document.getElementById('whycamera').classList.add('no-display');
   let net;
   try {
     net = await posenet.load(mobileNetConfig);
@@ -84,4 +83,5 @@ function detectPoseInRealTime(video, net) {
 
 document.getElementById('calibrate').onclick = function() {
   config.saveNextPose = true;
+  hideMsg();
 }
