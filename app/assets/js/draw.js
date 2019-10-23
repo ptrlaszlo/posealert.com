@@ -16,22 +16,23 @@ function drawPoses(ctx, poses, config) {
 
 function drawPose(ctx, score, keypoints, config, color, showDistance = false) {
   if (score >= config.minPoseConfidence) {
-    drawKeypoints(keypoints, config.minPartConfidence, ctx, color, showDistance, config.distanceDelta);
+    drawKeypoints(keypoints, config, ctx, color, showDistance);
   }
 }
 
-function drawKeypoints(keypoints, minConfidence, ctx, color, showDistance, distanceDelta, scale = 1) {
+function drawKeypoints(keypoints, config, ctx, color, showDistance, scale = 1) {
   for (let i = 0; i < keypoints.length; i++) {
     const keypoint = keypoints[i];
 
-    if (keypoint.score < minConfidence) {
+    if (keypoint.score < config.minConfidence) {
       continue;
     }
 
     const {y, x} = keypoint.position;
-    const text = keypoint.part + ' ' + keypoint.score.toFixed(4) + ' x: ' + x.toFixed(2) + ' y: ' + y.toFixed(2);
+    const text = '';
+    // const text = keypoint.part + ' ' + keypoint.score.toFixed(4) + ' x: ' + x.toFixed(2) + ' y: ' + y.toFixed(2);
     if (showDistance) {
-      drawDistance(ctx, y * scale, x * scale, distanceDelta, color);
+      drawDistance(ctx, y * scale, x * scale, config.distanceDelta, color);
     } else {
       drawPoint(ctx, y * scale, x * scale, 3, color, text);
     }
@@ -51,6 +52,6 @@ function drawPoint(ctx, y, x, r, color, text) {
   ctx.beginPath();
   ctx.arc(x, y, r, 0, 2 * Math.PI);
   ctx.fillStyle = color;
-  // ctx.fillText(text, x + 5, y);
+  ctx.fillText(text, x + 5, y);
   ctx.fill();
 }

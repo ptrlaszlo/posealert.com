@@ -7,6 +7,9 @@ import { isPoseCorrect } from './pose.js';
 import { config, mobileNetConfig } from './config.js';
 // import { storeJson, getJson } from './storage.js';
 
+const beep = new Audio('assets/beep-07.mp3');
+window.config = config;
+
 async function startRecognition() {
   let video;
   try {
@@ -67,11 +70,8 @@ function detectPoseInRealTime(video, net) {
       requestAnimationFrame(poseDetectionFrame);
     } else {
       if (currentPose.score >= config.minPoseConfidence) {
-        const resss = isPoseCorrect(currentPose, config.correctPose, config.minPartConfidence, config.distanceDelta);
-        if (resss) {
-          document.getElementById('calibrate').style.backgroundColor = "green";
-        } else {
-          document.getElementById('calibrate').style.backgroundColor = "red";
+        if (!isPoseCorrect(currentPose, config.correctPose, config.minPartConfidence, config.distanceDelta)) {
+          beep.play();
         }
       }
       // only running pose detection in every two seconds to save CPU
