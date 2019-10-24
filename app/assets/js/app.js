@@ -70,7 +70,9 @@ function detectPoseInRealTime(video, net) {
     } else {
       if (currentPose.score >= config.minPoseConfidence) {
         if (!isPoseCorrect(currentPose, config.correctPose, config.minPartConfidence, config.distanceDelta)) {
-          beep.play();
+          if (config.playSound) {
+            beep.play();
+          }
         }
       }
       // only running pose detection in every two seconds to save CPU
@@ -82,6 +84,34 @@ function detectPoseInRealTime(video, net) {
 }
 
 document.getElementById('calibrate').onclick = function() {
+  calibrate();
+}
+
+document.getElementById('mute').onclick = function() {
+  toggleAudio();
+}
+
+document.onkeypress = function (e) {
+    e = e || window.event;
+    if (e.keyCode == 77 || e.keyCode == 109) { // pressed M or m
+      toggleAudio();
+    } else if (e.keyCode == 67 || e.keyCode == 99) { // pressed C or c
+      calibrate();
+    }
+};
+
+function calibrate() {
   config.saveNextPose = true;
   hideMsg();
+}
+
+function toggleAudio() {
+  let muteBtn = document.getElementById('mute');
+  if (config.playSound) {
+    config.playSound = false;
+    muteBtn.innerHTML = "🔇";
+  } else {
+    config.playSound = true;
+    muteBtn.innerHTML = "🔉";
+  }
 }

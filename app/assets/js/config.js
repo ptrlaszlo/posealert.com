@@ -3,6 +3,7 @@ export { config, mobileNetConfig };
 let config = {
   debugMode: true, // draw on canvas if true
   saveNextPose: false, // save the next pose as a correct one
+  playSound: true, // play sound for incorrect pose if true
   correctPose: undefined,
   distanceDelta: 15, // the maximum allowed distance from correct pose
   minPoseConfidence: 0.3,
