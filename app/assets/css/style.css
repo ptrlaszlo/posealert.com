@@ -26,14 +26,21 @@ html, body{
 
 #msgbox {
   position: fixed;
-  width: 370px;
   background-color: rgb(32, 156, 238);
   color: #DDD;
   bottom: calc(50%);
-  left: calc(50% - 210px);
   border-radius: 4px;
   padding: 20px;
   padding-right: 30px;
+  width: 370px;
+  left: calc(50% - 210px);
+}
+
+@media (max-width: 500px) {
+  #msgbox {
+    width: 210px;
+    left: calc(50% - 130px);
+  }
 }
 
 .delete {
