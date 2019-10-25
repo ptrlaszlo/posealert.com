@@ -1,5 +1,5 @@
 
-export { drawPoses };
+export { drawPoses, drawHistory };
 
 function drawPoses(ctx, poses, config) {
   let videoWidth = config.videoWidth;
@@ -53,4 +53,30 @@ function drawPoint(ctx, y, x, r, color, text) {
   ctx.fillStyle = color;
   ctx.fillText(text, x + 5, y);
   ctx.fill();
+}
+
+const debugCanvas = document.getElementById('debugcanvas');
+const debugCtx = debugCanvas.getContext('2d');
+let radius = 100;
+debugCanvas.width = 2*radius;
+debugCanvas.height = 2*radius;
+let drawIndex = 0;
+
+function drawHistory(poseHistory, historySize) {
+  if (poseHistory.length != 0) {
+    let sliceSize = 2 * Math.PI / historySize;
+    let lastPose = poseHistory[poseHistory.length - 1];
+    debugCtx.beginPath();
+    debugCtx.moveTo(radius, radius);
+    if (lastPose == "CORRECT") {
+      debugCtx.fillStyle = 'green';
+    } else if (lastPose == "INCORRECT") {
+      debugCtx.fillStyle = 'red';
+    } else {
+      debugCtx.fillStyle = 'yellow';
+    }
+    debugCtx.arc(radius, radius, radius, drawIndex * sliceSize, (drawIndex+1) * sliceSize);
+    debugCtx.fill();
+    drawIndex = (drawIndex + 1) % historySize;
+  }
 }

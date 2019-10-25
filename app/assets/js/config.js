@@ -5,6 +5,8 @@ let config = {
   saveNextPose: false, // save the next pose as a correct one
   playSound: true, // play sound for incorrect pose if true
   correctPose: undefined,
+  detectionDelayMs: 2000, // how often should posenet run
+  historySize: 10, // size of the pose history queue
   distanceDelta: 15, // the maximum allowed distance from correct pose
   minPoseConfidence: 0.3,
   minPartConfidence: 0.6,

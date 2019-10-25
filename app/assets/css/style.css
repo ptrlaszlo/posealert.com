@@ -24,6 +24,15 @@ html, body{
   transform: scaleX(-1);
 }
 
+#debugcanvas {
+  position: fixed;
+  bottom:10px;
+  left:10px;
+  width: 50px;
+  height: 50px;
+  opacity: 0.7;
+}
+
 #msgbox {
   position: fixed;
   background-color: rgb(32, 156, 238);

@@ -15,11 +15,11 @@
     <button id="calibrate" class="btn btn-bottom-center" title="Shortcut: c">Calibrate</button>
     <a href="faq.html" class="btn btn-top-right">FAQ</a>
     <button id="mute" class="btn btn-top-left" title="Shortcut: m">🔉</button>
+    <canvas id="debugcanvas"></canvas>
     <div id="msgbox">
       <button class="delete" onclick="this.parentElement.classList.add('no-display')"></button>
       <div id="msg">PoseAlert.com helps you maintain correct posture while sitting. Sit up straight and click "Calibrate" to start. For more info check our <a href="faq.html">FAQ</a></div>
     </div>
-
     <!-- Load TensorFlow.js -->
     <script src="https://unpkg.com/@tensorflow/tfjs"></script>
     <!-- Load Posenet -->

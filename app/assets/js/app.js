@@ -1,14 +1,17 @@
 /* global posenet */ // to mute eslint warnings
 
 import { loadVideo } from './video.js';
-import { drawPoses } from './draw.js';
+import { drawPoses, drawHistory } from './draw.js';
 import { showMsg, hideMsg } from './msg.js';
 import { isPoseCorrect } from './pose.js';
 import { config, mobileNetConfig } from './config.js';
 // import { storeJson, getJson } from './storage.js';
 
-const beep = new Audio('assets/beep-07.mp3');
 window.config = config;
+
+const beep = new Audio('assets/beep-07.mp3');
+
+let poseHistory = [];
 
 async function startRecognition() {
   let video;
@@ -61,22 +64,39 @@ function detectPoseInRealTime(video, net) {
       config.saveNextPose = false;
     }
 
-    if (config.debugMode) {
-      drawPoses(ctx, poses, config);
-    }
-
     if (config.correctPose === undefined) {
       requestAnimationFrame(poseDetectionFrame);
     } else {
+      let poseState;
       if (currentPose.score >= config.minPoseConfidence) {
-        if (!isPoseCorrect(currentPose, config.correctPose, config.minPartConfidence, config.distanceDelta)) {
-          if (config.playSound) {
-            beep.play();
-          }
+        if (isPoseCorrect(currentPose, config.correctPose, config.minPartConfidence, config.distanceDelta)) {
+          poseState = "CORRECT";
+        } else {
+          poseState = "INCORRECT";
         }
+      } else {
+        poseState = "NOPOSE";
       }
-      // only running pose detection in every two seconds to save CPU
-      setTimeout(function(){ requestAnimationFrame(poseDetectionFrame); }, 2000);
+
+      poseHistory.push(poseState);
+
+      if (poseHistory.length > config.historySize) {
+        poseHistory.shift(); // drop the first element from the list
+      }
+
+      let allIncorrect = poseHistory.every(p => p == "INCORRECT");
+
+      if (config.playSound && allIncorrect) {
+        beep.play();
+      }
+
+      // only running pose detection in every few seconds to save CPU
+      setTimeout(function(){ requestAnimationFrame(poseDetectionFrame); }, config.detectionDelayMs);
+    }
+
+    if (config.debugMode) {
+      drawPoses(ctx, poses, config);
+      drawHistory(poseHistory, config.historySize);
     }
   }
 
