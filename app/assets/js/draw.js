@@ -24,7 +24,7 @@ function drawKeypoints(keypoints, config, ctx, color, showDistance, scale = 1) {
   for (let i = 0; i < keypoints.length; i++) {
     const keypoint = keypoints[i];
 
-    if (keypoint.score < config.minConfidence) {
+    if (keypoint.score < config.minPartConfidence) {
       continue;
     }
 
