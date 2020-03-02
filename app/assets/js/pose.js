@@ -1,27 +1,28 @@
-export { isPoseCorrect };
+export { isWristTooClose };
 
-function isPoseCorrect(currentPose, correctPose, minPartConfidence, distanceDelta) {
-  return compare(nose, currentPose, correctPose, minPartConfidence, distanceDelta) &&
-    compare(leftEye, currentPose, correctPose, minPartConfidence, distanceDelta) &&
-    compare(rightEye, currentPose, correctPose, minPartConfidence, distanceDelta) &&
-    compare(leftEar, currentPose, correctPose, minPartConfidence, distanceDelta) &&
-    compare(rightEar, currentPose, correctPose, minPartConfidence, distanceDelta) &&
-    compare(leftShoulder, currentPose, correctPose, minPartConfidence, distanceDelta) &&
-    compare(rightShoulder, currentPose, correctPose, minPartConfidence, distanceDelta);
+function isWristTooClose(currentPose, minPartConfidence, distanceDelta) {
+  return compareWristDistance(leftWrist, nose, currentPose, minPartConfidence, distanceDelta) ||
+    compareWristDistance(rightWrist, nose, currentPose, minPartConfidence, distanceDelta) ||
+    compareWristDistance(leftWrist, leftEye, currentPose, minPartConfidence, distanceDelta) ||
+    compareWristDistance(rightWrist, leftEye, currentPose, minPartConfidence, distanceDelta) ||
+    compareWristDistance(leftWrist, rightEye, currentPose, minPartConfidence, distanceDelta) ||
+    compareWristDistance(rightWrist, rightEye, currentPose, minPartConfidence, distanceDelta);
 }
 
-function compare(partName, currentPose, correctPose, minPartConfidence, distanceDelta) {
-  let currentPart = find(currentPose, partName, minPartConfidence);
-  let correctPart = find(correctPose, partName, minPartConfidence);
-  if (currentPart !== undefined && correctPart !== undefined) {
-    if (Math.abs(currentPart.position.x - correctPart.position.x) >= distanceDelta) {
+function compareWristDistance(wrist, part, currentPose, minPartConfidence, distanceDelta) {
+  let partPos = find(currentPose, part, minPartConfidence);
+  let wristPos = find(currentPose, wrist, minPartConfidence);
+  if (partPos !== undefined && wristPos !== undefined) {
+    if (Math.abs(partPos.position.x - wristPos.position.x) >= distanceDelta) {
       return false;
     }
-    if (Math.abs(currentPart.position.y - correctPart.position.y) >= distanceDelta) {
+    if (Math.abs(partPos.position.y - wristPos.position.y) >= distanceDelta) {
       return false;
     }
+    return true;
+  } else {
+    return false;
   }
-  return true;
 }
 
 function find(pose, partName, minPartConfidence) {
@@ -31,14 +32,14 @@ function find(pose, partName, minPartConfidence) {
 const nose = "nose";
 const leftEye = "leftEye";
 const rightEye = "rightEye";
-const leftEar = "leftEar";
-const rightEar = "rightEar";
-const leftShoulder = "leftShoulder";
-const rightShoulder = "rightShoulder";
+// const leftEar = "leftEar";
+// const rightEar = "rightEar";
+// const leftShoulder = "leftShoulder";
+// const rightShoulder = "rightShoulder";
+const leftWrist = "leftWrist";
+const rightWrist = "rightWrist";
 // const leftElbow = "leftElbow";
 // const rightElbow = "rightElbow";
-// const leftWrist = "leftWrist";
-// const rightWrist = "rightWrist";
 // const leftHip = "leftHip";
 // const rightHip = "rightHip";
 // const leftKnee = "leftKnee";

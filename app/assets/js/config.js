@@ -1,13 +1,13 @@
 export { config, mobileNetConfig };
 
 let config = {
-  debugMode: true, // draw on canvas if true
+  debugMode: false, // draw on canvas if true
   saveNextPose: false, // save the next pose as a correct one
   playSound: true, // play sound for incorrect pose if true
   correctPose: undefined,
-  detectionDelayMs: 2000, // how often should posenet run
+  detectionDelayMs: 1000, // how often should posenet run
   historySize: 10, // size of the pose history queue
-  distanceDelta: 15, // the maximum allowed distance from correct pose
+  distanceDelta: 170, // the maximum allowed distance from correct pose
   minPoseConfidence: 0.3,
   minPartConfidence: 0.6,
   videoWidth: 800,

@@ -1,17 +1,15 @@
 /* global posenet */ // to mute eslint warnings
 
 import { loadVideo } from './video.js';
-import { drawPoses, drawHistory } from './draw.js';
+import { drawPoses } from './draw.js';
 import { showMsg, hideMsg } from './msg.js';
-import { isPoseCorrect } from './pose.js';
+import { isWristTooClose } from './pose.js';
 import { config, mobileNetConfig } from './config.js';
 // import { storeJson, getJson } from './storage.js';
 
 window.config = config;
 
 const beep = new Audio('assets/beep-07.mp3');
-
-let poseHistory = [];
 
 async function startRecognition() {
   let video;
@@ -59,52 +57,24 @@ function detectPoseInRealTime(video, net) {
 
     const currentPose = poses[0];
 
-    if (config.saveNextPose && currentPose.score >= config.minPoseConfidence) {
-      config.correctPose = currentPose;
-      config.saveNextPose = false;
-    }
-
-    if (config.correctPose === undefined) {
-      requestAnimationFrame(poseDetectionFrame);
-    } else {
-      let poseState;
-      if (currentPose.score >= config.minPoseConfidence) {
-        if (isPoseCorrect(currentPose, config.correctPose, config.minPartConfidence, config.distanceDelta)) {
-          poseState = "CORRECT";
-        } else {
-          poseState = "INCORRECT";
+    if (currentPose.score >= config.minPoseConfidence) {
+      if (isWristTooClose(currentPose, config.minPartConfidence, config.distanceDelta)) {
+        if (config.playSound) {
+          hideMsg();
+          beep.play();
         }
-      } else {
-        poseState = "NOPOSE";
       }
-
-      poseHistory.push(poseState);
-
-      if (poseHistory.length > config.historySize) {
-        poseHistory.shift(); // drop the first element from the list
-      }
-
-      let allIncorrect = poseHistory.every(p => p == "INCORRECT");
-
-      if (config.playSound && allIncorrect) {
-        beep.play();
-      }
-
-      // only running pose detection in every few seconds to save CPU
-      setTimeout(function(){ requestAnimationFrame(poseDetectionFrame); }, config.detectionDelayMs);
     }
+
+    // only running pose detection in every few seconds to save CPU
+    setTimeout(function(){ requestAnimationFrame(poseDetectionFrame); }, config.detectionDelayMs);
 
     if (config.debugMode) {
       drawPoses(ctx, poses, config);
-      drawHistory(poseHistory, config.historySize);
     }
   }
 
   poseDetectionFrame();
-}
-
-document.getElementById('calibrate').onclick = function() {
-  calibrate();
 }
 
 document.getElementById('mute').onclick = function() {
@@ -115,15 +85,8 @@ document.onkeypress = function (e) {
     e = e || window.event;
     if (e.keyCode == 77 || e.keyCode == 109) { // pressed M or m
       toggleAudio();
-    } else if (e.keyCode == 67 || e.keyCode == 99) { // pressed C or c
-      calibrate();
     }
 };
-
-function calibrate() {
-  config.saveNextPose = true;
-  hideMsg();
-}
 
 function toggleAudio() {
   let muteBtn = document.getElementById('mute');

@@ -4,17 +4,12 @@ export { drawPoses, drawHistory };
 function drawPoses(ctx, poses, config) {
   let videoWidth = config.videoWidth;
   let videoHeight = config.videoHeight;
-  let correctPose = config.correctPose;
   ctx.clearRect(0, 0, videoWidth, videoHeight);
 
-  poses.forEach(({score, keypoints}) => drawPose(ctx, score, keypoints, config, "#ff2626"));
-
-  if (correctPose !== undefined) {
-    drawPose(ctx, correctPose.score, correctPose.keypoints, config, "#26ff26", true);
-  }
+  poses.forEach(({score, keypoints}) => drawPose(ctx, score, keypoints, config, "#ff2626", false));
 }
 
-function drawPose(ctx, score, keypoints, config, color, showDistance = false) {
+function drawPose(ctx, score, keypoints, config, color, showDistance = true) {
   if (score >= config.minPoseConfidence) {
     drawKeypoints(keypoints, config, ctx, color, showDistance);
   }
